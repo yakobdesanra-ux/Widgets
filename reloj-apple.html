@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reloj</title>
+<style>
+  /* Invertido a propósito, igual que el resto de widgets: en modo claro del sistema, el widget se ve oscuro (índigo sólido), y en modo oscuro se ve blanco limpio */
+  :root{
+    --glass: rgba(28,13,68,0.82);
+    --glass-edge: rgba(255,255,255,0.18);
+    --glass-edge-soft: rgba(255,255,255,0.06);
+    --label: #f3eefc;
+    --secondary-label: #a99bd1;
+    --glow: rgba(142,68,255,0.55);
+    --shadow: 0 1px 1px rgba(0,0,0,0.3), 0 16px 40px rgba(0,0,0,0.5);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --glass: rgba(255,255,255,0.92);
+      --glass-edge: rgba(255,255,255,0.9);
+      --glass-edge-soft: rgba(0,0,0,0.04);
+      --label: #1c1c1e;
+      --secondary-label: #6b5a9e;
+      --glow: rgba(10,132,255,0.4);
+      --shadow: 0 1px 1px rgba(0,0,0,0.05), 0 12px 32px rgba(0,0,0,0.14);
+    }
+  }
+  html,body{ margin:0; padding:0; height:100%; background:#fff; }
+  @media (prefers-color-scheme: dark){ html,body{ background:#191919; } }
+
+  body{
+    display:flex; align-items:center; justify-content:center;
+    width:100%; height:100%;
+    font-family: -apple-system, "SF Pro Display", "SF Pro Text", BlinkMacSystemFont, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .stage{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display:flex; align-items:center; justify-content:center;
+  }
+
+  /* halo difuminado detrás de la tarjeta */
+  .glow{
+    position: absolute;
+    width: 78%;
+    height: 78%;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, var(--glow), transparent 72%);
+    filter: blur(26px);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .widget{
+    position: relative;
+    z-index: 1;
+    width: min(80%, 220px);
+    height: min(68%, 130px);
+    border-radius: 28px;
+    background: var(--glass);
+    box-shadow:
+      var(--shadow),
+      inset 0 1px 1px var(--glass-edge),
+      inset 0 0 0 1px var(--glass-edge-soft);
+    -webkit-backdrop-filter: blur(28px) saturate(190%);
+    backdrop-filter: blur(28px) saturate(190%);
+    overflow: hidden;
+    display:flex; align-items:center; justify-content:center;
+    isolation: isolate;
+  }
+
+  /* liquid-glass specular sheen */
+  .widget::before{
+    content:"";
+    position:absolute; inset:0;
+    background: linear-gradient(
+      165deg,
+      rgba(255,255,255,0.22) 0%,
+      rgba(255,255,255,0.06) 18%,
+      rgba(255,255,255,0) 40%
+    );
+    mix-blend-mode: overlay;
+    pointer-events:none;
+  }
+  @media (prefers-color-scheme: dark){
+    .widget::before{
+      background: linear-gradient(
+        165deg,
+        rgba(255,255,255,0.55) 0%,
+        rgba(255,255,255,0.12) 18%,
+        rgba(255,255,255,0) 38%
+      );
+    }
+  }
+
+  .time{
+    position: relative;
+    z-index: 1;
+    color: var(--label);
+    font-size: clamp(26px, 12vw, 60px);
+    font-weight: 200;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .colon{
+    animation: blink 2s steps(1) infinite;
+  }
+  @keyframes blink{
+    0%, 49%{ opacity: 1; }
+    50%, 100%{ opacity: 0.25; }
+  }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="glow"></div>
+    <div class="widget">
+      <div class="time" id="time">—:—</div>
+    </div>
+  </div>
+  <script>
+    function render(){
+      const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Europe/Madrid" }));
+      const h = String(now.getHours()).padStart(2, "0");
+      const m = String(now.getMinutes()).padStart(2, "0");
+      document.getElementById("time").innerHTML = h + "<span class=\"colon\">:</span>" + m;
+    }
+    render();
+    setInterval(render, 1000);
+  </script>
+</body>
+</html>
