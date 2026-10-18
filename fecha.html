@@ -7,6 +7,172 @@
 <style>
   /* Invertido a propósito: en modo claro del sistema, el widget se ve oscuro (índigo sólido), y viceversa (blanco limpio) */
   :root{
+    --glass: rgba(0,0,0,0.78);
+    --glass-edge: rgba(255,255,255,0.18);
+    --glass-edge-soft: rgba(255,255,255,0.06);
+    --label: #f5f5f7;
+    --secondary-label: #a0a0a5;
+    --sys-red: #FF3B30;
+    --red-label: #ffffff;
+    --glow: rgba(0,0,0,0.65);
+    --shadow: 0 1px 1px rgba(0,0,0,0.3), 0 16px 40px rgba(0,0,0,0.5);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --glass: rgba(255,255,255,0.92);
+      --glass-edge: rgba(255,255,255,0.9);
+      --glass-edge-soft: rgba(0,0,0,0.04);
+      --label: #1c1c1e;
+      --secondary-label: #6e6e73;
+      --sys-red: #FF453A;
+      --red-label: #ffffff;
+      --glow: rgba(255,255,255,0.6);
+      --shadow: 0 1px 1px rgba(0,0,0,0.05), 0 12px 32px rgba(0,0,0,0.14);
+    }
+  }
+  html,body{ margin:0; padding:0; height:100%; background:#fff; }
+  @media (prefers-color-scheme: dark){ html,body{ background:#191919; } }
+
+  body{
+    display:flex; align-items:center; justify-content:center;
+    width:100%; height:100%;
+    font-family: -apple-system, "SF Pro Display", "SF Pro Text", BlinkMacSystemFont, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .stage{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display:flex; align-items:center; justify-content:center;
+  }
+
+  /* halo difuminado detrás de la tarjeta */
+  .glow{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, var(--glow), transparent 72%);
+    filter: blur(30px);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .widget{
+    position: relative;
+    z-index: 1;
+    width: min(78%, 170px);
+    aspect-ratio: 1 / 1;
+    border-radius: 20px;
+    background: var(--glass);
+    box-shadow:
+      var(--shadow),
+      inset 0 1px 1px var(--glass-edge),
+      inset 0 0 0 1px var(--glass-edge-soft);
+    -webkit-backdrop-filter: blur(28px) saturate(190%);
+    backdrop-filter: blur(28px) saturate(190%);
+    overflow: hidden;
+    display:flex; flex-direction:column;
+    isolation: isolate;
+  }
+
+  /* liquid-glass specular sheen (también invertido) */
+  .widget::before{
+    content:"";
+    position:absolute; inset:0;
+    background: linear-gradient(
+      165deg,
+      rgba(255,255,255,0.22) 0%,
+      rgba(255,255,255,0.06) 18%,
+      rgba(255,255,255,0) 40%
+    );
+    mix-blend-mode: overlay;
+    pointer-events:none;
+  }
+  @media (prefers-color-scheme: dark){
+    .widget::before{
+      background: linear-gradient(
+        165deg,
+        rgba(255,255,255,0.55) 0%,
+        rgba(255,255,255,0.12) 18%,
+        rgba(255,255,255,0) 38%
+      );
+    }
+  }
+
+  .month{
+    position: relative;
+    z-index: 1;
+    background: var(--sys-red);
+    color: var(--red-label);
+    text-align:center;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    padding: 7px 0 6px;
+  }
+
+  .body{
+    position: relative;
+    z-index: 1;
+    flex:1;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap: 2px;
+  }
+
+  .num{
+    font-size: 54px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--label);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .dow{
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--secondary-label);
+    text-transform: capitalize;
+  }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="glow"></div>
+    <div class="widget">
+      <div class="month" id="month">—</div>
+      <div class="body">
+        <div class="num" id="num">—</div>
+        <div class="dow" id="dow">—</div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const DOW = ["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+    const MESES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+    function render(){
+      const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Europe/Madrid" }));
+      document.getElementById("month").textContent = MESES[now.getMonth()];
+      document.getElementById("num").textContent = now.getDate();
+      document.getElementById("dow").textContent = DOW[now.getDay()];
+    }
+    render();
+    setInterval(render, 60000);
+  </script>
+</body>
+</html>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fecha de hoy</title>
+<style>
+  /* Invertido a propósito: en modo claro del sistema, el widget se ve oscuro (índigo sólido), y viceversa (blanco limpio) */
+  :root{
     --glass: rgba(28,13,68,0.82);
     --glass-edge: rgba(255,255,255,0.18);
     --glass-edge-soft: rgba(255,255,255,0.06);
