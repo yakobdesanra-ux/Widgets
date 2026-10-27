@@ -27,19 +27,13 @@
       margin-inline: auto;
       overflow: hidden;
       isolation: isolate;
-      background: #d2c8af;
+      background: #191919;
       border: 0;
       border-radius: 18px;
       box-shadow: none;
     }
-    .art, .wash, .art img { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .art, .art img { position: absolute; inset: 0; width: 100%; height: 100%; }
     .art { margin: 0; }
-    .wash {
-      object-fit: cover;
-      filter: blur(22px) brightness(.72);
-      transform: scale(1.08);
-      transition: opacity .5s ease;
-    }
     .art img.main {
       z-index: 1;
       object-fit: contain;
@@ -57,7 +51,6 @@
 <body>
   <main class="frame" role="region" aria-label="Galería de estampas japonesas">
     <figure class="art">
-      <img class="wash" id="wash" alt="" aria-hidden="true">
       <img class="main" id="artwork" alt="Estampa japonesa">
     </figure>
   </main>
@@ -117,7 +110,6 @@
         "the-walters-art-museum-TOzWQvcw0_U-unsplash.jpg",
       ];
       const artwork = document.getElementById("artwork");
-      const wash = document.getElementById("wash");
       const slideInterval = 33000;
       const storageKey = "yakob-japanese-art-index";
       function readSavedIndex() {
@@ -136,17 +128,13 @@
         try { localStorage.setItem(storageKey, String(index)); } catch (_) {}
         const path = source(files[index]);
         artwork.style.opacity = "0";
-        wash.style.opacity = "0";
         const preload = new Image();
         preload.onload = () => {
           artwork.src = path;
-          wash.src = path;
           artwork.style.opacity = "1";
-          wash.style.opacity = "1";
         };
         preload.onerror = () => {
           artwork.style.opacity = "1";
-          wash.style.opacity = "1";
         };
         preload.src = path;
       }
