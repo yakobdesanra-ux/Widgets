@@ -22,10 +22,9 @@
     }
     .frame {
       position: relative;
-      width: 100%;
+      width: min(100%, 177.78vh, 900px);
       aspect-ratio: 16 / 9;
       height: auto;
-      max-width: 900px;
       margin-inline: auto;
       overflow: hidden;
       isolation: isolate;
@@ -44,8 +43,8 @@
     }
     .art img.main {
       z-index: 1;
-      object-fit: cover;
-      object-position: center top;
+      object-fit: contain;
+      object-position: center;
       transition: opacity .45s ease;
     }
     @media (max-width: 560px) {
