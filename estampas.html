@@ -102,11 +102,21 @@
       const wash = document.getElementById("wash");
       const progress = document.getElementById("progress");
       const slideInterval = 213000;
-      let index = 0;
+      const storageKey = "yakob-japanese-art-index";
+      function readSavedIndex() {
+        try {
+          const saved = Number.parseInt(localStorage.getItem(storageKey), 10);
+          return Number.isInteger(saved) && saved >= 0 ? saved % files.length : 0;
+        } catch (_) {
+          return 0;
+        }
+      }
+      let index = readSavedIndex();
       const source = file => `assets/japan/${encodeURIComponent(file)}`;
 
       function show(nextIndex) {
         index = (nextIndex + files.length) % files.length;
+        try { localStorage.setItem(storageKey, String(index)); } catch (_) {}
         const path = source(files[index]);
         artwork.style.opacity = "0";
         wash.style.opacity = "0";
