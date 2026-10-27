@@ -53,29 +53,11 @@
       object-position: center top;
       transition: opacity .45s ease;
     }
-    .shade {
-      position: absolute;
-      z-index: 2;
-      inset: 35% 0 0;
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 22px 24px;
-      color: white;
-      background: linear-gradient(transparent, rgba(0, 0, 0, .58));
-      pointer-events: none;
-    }
-    .caption { display: grid; gap: 6px; text-shadow: 0 1px 8px rgba(0, 0, 0, .4); }
-    .eyebrow { font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; opacity: .85; }
-    .caption strong { font-size: clamp(16px, 2vw, 22px); font-weight: 550; letter-spacing: -.02em; }
-    .counter { align-self: flex-end; font-size: 12px; font-variant-numeric: tabular-nums; letter-spacing: .08em; opacity: .9; white-space: nowrap; }
     .progress { position: absolute; z-index: 4; right: 0; bottom: 0; left: 0; height: 3px; background: rgba(255,255,255,.24); }
     .progress span { display: block; height: 100%; width: 0; background: var(--progress); }
     @media (max-width: 560px) {
       body { padding: 4px; }
       .frame { min-height: 190px; border-radius: 14px; }
-      .shade { padding: 16px; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
@@ -87,13 +69,6 @@
     <figure class="art">
       <img class="wash" id="wash" alt="" aria-hidden="true">
       <img class="main" id="artwork" alt="Estampa japonesa">
-      <figcaption class="shade">
-        <span class="caption">
-          <span class="eyebrow">Colección japonesa</span>
-          <strong>Estampas japonesas</strong>
-        </span>
-        <span class="counter" id="counter" aria-live="polite">01 / 25</span>
-      </figcaption>
     </figure>
     <div class="progress" aria-hidden="true"><span id="progress"></span></div>
   </main>
@@ -128,7 +103,6 @@
       ];
       const artwork = document.getElementById("artwork");
       const wash = document.getElementById("wash");
-      const counter = document.getElementById("counter");
       const progress = document.getElementById("progress");
       const slideInterval = 213000;
       let index = 0;
@@ -151,7 +125,6 @@
           wash.style.opacity = "1";
         };
         preload.src = path;
-        counter.textContent = `${String(index + 1).padStart(2, "0")} / ${String(files.length).padStart(2, "0")}`;
         progress.style.transition = "none";
         progress.style.width = "0";
         requestAnimationFrame(() => {
