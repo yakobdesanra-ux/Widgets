@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Estampas japonesas</title>
+  <style>
+    :root {
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        color-scheme: dark;
+      }
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 100%; background: transparent; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .frame {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      margin-inline: auto;
+      overflow: hidden;
+      isolation: isolate;
+      background: #191919;
+      border: 0;
+      border-radius: 18px;
+      box-shadow: none;
+    }
+    .art, .art img { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .art { margin: 0; }
+    .art img.main {
+      z-index: 1;
+      object-fit: contain;
+      object-position: center;
+      transition: opacity .45s ease;
+    }
+    @media (max-width: 560px) {
+      .frame { border-radius: 14px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="frame" role="region" aria-label="Galería de estampas japonesas">
+    <figure class="art">
+      <img class="main" id="artwork" alt="Estampa japonesa">
+    </figure>
+  </main>
+  <script>
+    (() => {
+      const files = [
+        "1.jpg",
+        "art-institute-of-chicago--06Of684aas-unsplash.jpg",
+        "art-institute-of-chicago-2iQMbDFiGhc-unsplash.jpg",
+        "art-institute-of-chicago-2JfVRs6BkNo-unsplash.jpg",
+        "art-institute-of-chicago-3vRZNa8EjF0-unsplash.jpg",
+        "art-institute-of-chicago-adHj6_pakQs-unsplash.jpg",
+        "art-institute-of-chicago-FbsgprE_YRI-unsplash.jpg",
+        "art-institute-of-chicago-gGM8Tfa4E2M-unsplash.jpg",
+        "art-institute-of-chicago-mli2UBmERXo-unsplash.jpg",
+        "art-institute-of-chicago-oOfKmaGYFRM-unsplash.jpg",
+        "art-institute-of-chicago-P4G54L_HhZI-unsplash.jpg",
+        "art-institute-of-chicago-VBIBfUiKwlA-unsplash.jpg",
+        "art-institute-of-chicago-YRBfKS79Wgk-unsplash.jpg",
+        "birmingham-museums-trust-bs0rerP5S84-unsplash.jpg",
+        "birmingham-museums-trust-DOyLqkSBunI-unsplash.jpg",
+        "the-cleveland-museum-of-art-1c21Tk73SN0-unsplash.jpg",
+        "the-cleveland-museum-of-art-FzKgiEibnEo-unsplash.jpg",
+        "the-cleveland-museum-of-art-HSaug6LVZWE-unsplash.jpg",
+        "the-cleveland-museum-of-art-Ir7apM_ZDrA-unsplash.jpg",
+        "the-cleveland-museum-of-art-QpxGWEvCtYE-unsplash.jpg",
+        "the-cleveland-museum-of-art-U9QJy0F_3MU-unsplash.jpg",
+        "the-cleveland-museum-of-art-zCuiDBrKIVo-unsplash.jpg",
+        "the-cleveland-museum-of-art-Zn0ej6CFbOw-unsplash.jpg",
+        "the-new-york-public-library-XDLJIT94Eg8-unsplash.jpg",
+        "the-walters-art-museum-K0LM79r2uGs-unsplash.jpg",
+        "art-institute-of-chicago-6jp3nga0NnE-unsplash.jpg",
+        "art-institute-of-chicago-7GxcD-kv_ww-unsplash.jpg",
+        "art-institute-of-chicago-FGuCahPfK_Y-unsplash.jpg",
+        "art-institute-of-chicago-gFH3FUzJ_N0-unsplash.jpg",
+        "art-institute-of-chicago-HHcRjI91JHo-unsplash.jpg",
+        "art-institute-of-chicago-is4O4rPP50I-unsplash.jpg",
+        "art-institute-of-chicago-J-4uS7iqokE-unsplash.jpg",
+        "art-institute-of-chicago-M4ke9qwiqhU-unsplash.jpg",
+        "art-institute-of-chicago-OpwwFIeQn3k-unsplash.jpg",
+        "art-institute-of-chicago-oX96r3T9fcQ-unsplash.jpg",
+        "art-institute-of-chicago-tOs8O4p8gOI-unsplash.jpg",
+        "art-institute-of-chicago-TxQh4Dra7zw-unsplash.jpg",
+        "art-institute-of-chicago-u6tebyTeB9c-unsplash.jpg",
+        "art-institute-of-chicago-ueWnHtoaplI-unsplash.jpg",
+        "art-institute-of-chicago-zBLKtiqAMZQ-unsplash.jpg",
+        "birmingham-museums-trust-bF-QF3885S4-unsplash.jpg",
+        "the-cleveland-museum-of-art-Bkg0KQdvnuQ-unsplash.jpg",
+        "the-cleveland-museum-of-art-gve3AQoCSnA-unsplash.jpg",
+        "the-cleveland-museum-of-art-iGliqwJVfok-unsplash.jpg",
+        "the-cleveland-museum-of-art-KqyhJe4uukU-unsplash.jpg",
+        "the-cleveland-museum-of-art-Mp8MSFcmLOM-unsplash.jpg",
+        "the-cleveland-museum-of-art-s1cegXORyPA-unsplash.jpg",
+        "the-cleveland-museum-of-art-ST734Qo214k-unsplash.jpg",
+        "the-new-york-public-library-XjSCuYYOhzI-unsplash.jpg",
+        "the-walters-art-museum-Fi9Gs9Hy6qg-unsplash.jpg",
+        "the-walters-art-museum-TOzWQvcw0_U-unsplash.jpg",
+      ];
+      const artwork = document.getElementById("artwork");
+      const slideInterval = 33000;
+      const storageKey = "yakob-japanese-art-index";
+      function readSavedIndex() {
+        try {
+          const saved = Number.parseInt(localStorage.getItem(storageKey), 10);
+          return Number.isInteger(saved) && saved >= 0 ? saved % files.length : 0;
+        } catch (_) {
+          return 0;
+        }
+      }
+      let index = readSavedIndex();
+      const source = file => `assets/japan/${encodeURIComponent(file)}`;
+
+      function show(nextIndex) {
+        index = (nextIndex + files.length) % files.length;
+        try { localStorage.setItem(storageKey, String(index)); } catch (_) {}
+        const path = source(files[index]);
+        artwork.style.opacity = "0";
+        const preload = new Image();
+        preload.onload = () => {
+          artwork.src = path;
+          artwork.style.opacity = "1";
+        };
+        preload.onerror = () => {
+          artwork.style.opacity = "1";
+        };
+        preload.src = path;
+      }
+
+      show(index);
+      window.setInterval(() => show(index + 1), slideInterval);
+    })();
+  </script>
+</body>
+</html>
